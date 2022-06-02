@@ -7,19 +7,39 @@ const setAttributes = (element, attributes) => {
     });
 };
 
-const createTextNode = (x, y, textValue, className = '') => {
+const setSelectedIndex = (svg, selectedIndex) => {
+    svg.dataset.selectedIndex = selectedIndex;
+};
+
+const createTextNode = (x, y, textValue, dataAttribute, index) => {
     const text = document.createElementNS(SVG_NAMESPACE, "text");
     setAttributes(text, {
         x,
         y,
-        class: className,
+        [dataAttribute]: index,
     });
     text.appendChild(document.createTextNode(textValue));
     return text;
 };
 
+const generateStyles = (data) => {
+    const labelSelectors = [];
+    const tooltipSelectors = [];
+    for (let i = 0; i < data.length; i++) {
+        labelSelectors.push(`[data-selected-index="${i}"] [data-label="${i}"]`);
+        tooltipSelectors.push(`[data-selected-index="${i}"] [data-tooltip="${i}"]`);
+    }
+    return `${labelSelectors.join(', ')} {
+        display: none;
+    } 
+    ${tooltipSelectors.join(', ')} {
+        display: initial;
+    }`;
+};
+
 const generatePyramidChart = (data, width = 400, height = 400) => {
     const svg = document.createElementNS(SVG_NAMESPACE, "svg");
+    setSelectedIndex(svg, -1);
     setAttributes(svg, {
         xmlns: SVG_NAMESPACE,
         viewBox: `0 0 ${width} ${height}`,
@@ -43,7 +63,10 @@ const generatePyramidChart = (data, width = 400, height = 400) => {
             text-anchor: middle;
             fill: #000;
         }
-        .tooltip { display: none; }`;
+        [data-tooltip] { 
+            display: none; 
+        }
+        ${generateStyles(data)}`;
 
     const g = document.createElementNS(SVG_NAMESPACE, "g");
     g.setAttribute("clip-path", `url(#${clipPathId})`);
@@ -65,21 +88,18 @@ const generatePyramidChart = (data, width = 400, height = 400) => {
             fill: d.color,
         });
         rectangle.onmouseover = function () {
-            const labels = svg.querySelectorAll(`.label`);
-            const tooltips = svg.querySelectorAll(`.tooltip`);
-            labels[i].style.display = 'none';
-            tooltips[i].style.display = 'initial';
+            setSelectedIndex(svg, i);
         };
         rectangle.onmouseleave = function () {
-            const labels = svg.querySelectorAll(`.label`);
-            const tooltips = svg.querySelectorAll(`.tooltip`);
-            labels[i].style.display = 'initial';
-            tooltips[i].style.display = 'none';
+            setSelectedIndex(svg, -1);
         };
         accumulatedHeight += rectHeight;
-        const text = createTextNode(width / 2, startY + rectHeight / 2, `${d.percent}%`, 'label');
+        const text = createTextNode(width / 2, startY + rectHeight / 2, `${d.percent}%`, 'data-label', i);
         const rate = d.rate ? `(Rate: ${d.rate})` : ''
-        const hoverText = createTextNode(width / 2, startY + rectHeight / 2, `${d.type} ${rate}: ${d.percent}%`, 'tooltip');
+        const hoverText = createTextNode(width / 2, startY + rectHeight / 2, `${d.type} ${rate}: ${d.percent}%`, 'data-tooltip', i);
+        hoverText.onmouseenter = function() {
+            setSelectedIndex(svg, i);
+        };
         g.appendChild(rectangle);
         svg.appendChild(text);
         svg.appendChild(hoverText);
