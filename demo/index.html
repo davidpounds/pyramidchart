@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pyramid Chart demo</title>
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            padding: 2rem;
+            font-family: Helvetica, Arial, sans-serif;
+        }
+
+        table.data {
+            --border-colour: #ccc;
+            border-collapse: collapse;
+            border-top: 2px solid var(--border-colour);
+            border-bottom: 2px solid var(--border-colour);
+        }
+
+        table.data caption {
+            caption-side: bottom;
+            margin-top: 1rem;
+        }
+
+        table.data td,
+        table.data th {
+            padding: 0.5rem;
+        }
+
+        table.data thead th {
+            text-align: left;
+            border-bottom: 2px solid var(--border-colour);
+        }
+
+        table.data thead th:not(:first-child),
+        table.data tbody td:not(:first-child) {
+            text-align: right;
+            padding-left: 2rem;
+        }
+
+        svg {
+            outline: 1px dashed green;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Pyramid Chart demo</h1>
+    <div id="pyramid-chart1"></div>
+    <table class="data">
+        <caption>Numbers &amp; rates of accidents year to date in each category</caption>
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Rate</th>
+                <th>Percentage</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-pyramid-color="#C7A4B8">
+                <td>Fatality</td>
+                <td></td>
+                <td>1%</td>
+            </tr>
+            <tr data-pyramid-color="#4D9CA0">
+                <td>Lost time/Serious injury</td>
+                <td>4.75</td>
+                <td>0.44%</td>
+            </tr>
+            <tr data-pyramid-color="#DF7970">
+                <td>Non-absence accidents</td>
+                <td>2.38</td>
+                <td>0.22%</td>
+            </tr>
+            <tr data-pyramid-color="#51CDA0">
+                <td>Near miss</td>
+                <td></td>
+                <td>0.5%</td>
+            </tr>
+            <tr data-pyramid-color="#6D78AD">
+                <td>Unsafe acts</td>
+                <td></td>
+                <td>1.1%</td>
+            </tr>
+        </tbody>
+    </table>
+    <script src="../src/pyramid-chart.js"></script>
+    <script>
+        const data = [{
+                color: "#C7A4B8",
+                type: "Fatality",
+                rate: "",
+                percent: 1,
+                height: 0.2,
+            },
+            {
+                color: "#4D9CA0",
+                type: "Lost time/Serious injury",
+                rate: "4.75",
+                percent: 0.44,
+                height: 0.2,
+            },
+            {
+                color: "#DF7970",
+                type: "Non-absence accidents",
+                rate: "2.38",
+                percent: 0.22,
+                height: 0.2,
+            },
+            {
+                color: "#51CDA0",
+                type: "Near miss",
+                rate: "",
+                percent: 0.5,
+                height: 0.2,
+            },
+            {
+                color: "#6D78AD",
+                type: "Unsafe acts",
+                rate: "",
+                percent: 1.1,
+                height: 0.2,
+            },
+        ];
+        const chart = document.querySelector('#pyramid-chart1');
+        generatePyramidChart(chart, data);
+    </script>
+</body>
+
+</html>
