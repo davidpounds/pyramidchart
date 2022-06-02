@@ -45,10 +45,6 @@
             text-align: right;
             padding-left: 2rem;
         }
-
-        svg {
-            outline: 1px dashed green;
-        }
     </style>
 </head>
 
@@ -130,8 +126,8 @@
                 height: 0.2,
             },
         ];
-        const chart = document.querySelector('#pyramid-chart1');
-        generatePyramidChart(chart, data);
+        const svg = generatePyramidChart(data);
+        document.querySelector('#pyramid-chart1').appendChild(svg);
     </script>
 </body>
 
