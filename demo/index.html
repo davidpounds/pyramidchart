@@ -18,116 +18,75 @@
             font-family: Helvetica, Arial, sans-serif;
         }
 
-        table.data {
-            --border-colour: #ccc;
-            border-collapse: collapse;
-            border-top: 2px solid var(--border-colour);
-            border-bottom: 2px solid var(--border-colour);
-        }
-
-        table.data caption {
-            caption-side: bottom;
-            margin-top: 1rem;
-        }
-
-        table.data td,
-        table.data th {
-            padding: 0.5rem;
-        }
-
-        table.data thead th {
-            text-align: left;
-            border-bottom: 2px solid var(--border-colour);
-        }
-
-        table.data thead th:not(:first-child),
-        table.data tbody td:not(:first-child) {
-            text-align: right;
-            padding-left: 2rem;
+        h1 {
+            margin: 0 0 2rem 0;
         }
     </style>
 </head>
 
 <body>
     <h1>Pyramid Chart demo</h1>
+    <p>See the README.md file for more information.</p>
+
+    <h2>Equal height slices</h2>
     <div id="pyramid-chart1"></div>
-    <table class="data">
-        <caption>Numbers &amp; rates of accidents year to date in each category</caption>
-        <thead>
-            <tr>
-                <th>Type</th>
-                <th>Rate</th>
-                <th>Percentage</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr data-pyramid-color="#C7A4B8">
-                <td>Fatality</td>
-                <td></td>
-                <td>1%</td>
-            </tr>
-            <tr data-pyramid-color="#4D9CA0">
-                <td>Lost time/Serious injury</td>
-                <td>4.75</td>
-                <td>0.44%</td>
-            </tr>
-            <tr data-pyramid-color="#DF7970">
-                <td>Non-absence accidents</td>
-                <td>2.38</td>
-                <td>0.22%</td>
-            </tr>
-            <tr data-pyramid-color="#51CDA0">
-                <td>Near miss</td>
-                <td></td>
-                <td>0.5%</td>
-            </tr>
-            <tr data-pyramid-color="#6D78AD">
-                <td>Unsafe acts</td>
-                <td></td>
-                <td>1.1%</td>
-            </tr>
-        </tbody>
-    </table>
+
+    <h2>Different height slices</h2>
+    <div id="pyramid-chart2"></div>
+
+    <h2>Different size and fewer slices</h2>
+    <div id="pyramid-chart3"></div>
+
     <script src="../src/pyramid-chart.js"></script>
     <script>
         const data = [{
                 color: "#C7A4B8",
-                type: "Fatality",
+                label: "Fatality",
                 rate: "",
                 percent: 1,
-                height: 0.2,
             },
             {
                 color: "#4D9CA0",
-                type: "Lost time/Serious injury",
+                label: "Lost time/Serious injury",
                 rate: "4.75",
                 percent: 0.44,
-                height: 0.2,
             },
             {
                 color: "#DF7970",
-                type: "Non-absence accidents",
+                label: "Non-absence accidents",
                 rate: "2.38",
                 percent: 0.22,
-                height: 0.2,
             },
             {
                 color: "#51CDA0",
-                type: "Near miss",
+                label: "Near miss",
                 rate: "",
                 percent: 0.5,
-                height: 0.2,
             },
             {
                 color: "#6D78AD",
-                type: "Unsafe acts",
+                label: "Unsafe acts",
                 rate: "",
                 percent: 1.1,
-                height: 0.2,
             },
         ];
-        const svg = generatePyramidChart(data);
-        document.querySelector('#pyramid-chart1').appendChild(svg);
+
+        const pyramidChart1 = new PyramidChart(data);
+        const svg1 = pyramidChart1.getPyramidChart();
+        document.querySelector('#pyramid-chart1').appendChild(svg1);
+
+        const heights = [1, 2, 2, 1, 3];
+        const data2 = data.map((d, i) => ({
+            ...d,
+            height: heights[i],
+        }));
+        const pyramidChart2 = new PyramidChart(data2);
+        const svg2 = pyramidChart2.getPyramidChart();
+        document.querySelector('#pyramid-chart2').appendChild(svg2);
+
+        const pyramidChart3 = new PyramidChart(data2.slice(0, 3), 500, 300);
+        const svg3 = pyramidChart3.getPyramidChart();
+        document.querySelector('#pyramid-chart3').appendChild(svg3);
     </script>
 </body>
 
