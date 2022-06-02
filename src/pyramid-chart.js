@@ -18,7 +18,7 @@ const createTextNode = (x, y, textValue, className = '') => {
     return text;
 };
 
-const generatePyramidChart = (container, data, width = 400, height = 400) => {
+const generatePyramidChart = (data, width = 400, height = 400) => {
     const svg = document.createElementNS(SVG_NAMESPACE, "svg");
     setAttributes(svg, {
         xmlns: SVG_NAMESPACE,
@@ -26,7 +26,6 @@ const generatePyramidChart = (container, data, width = 400, height = 400) => {
         width: width,
         height: height,
     });
-    container.appendChild(svg);
     const defs = document.createElementNS(SVG_NAMESPACE, "defs");
     const clipPathId = "triangle";
     const clipPath = document.createElementNS(SVG_NAMESPACE, "clipPath");
@@ -86,4 +85,5 @@ const generatePyramidChart = (container, data, width = 400, height = 400) => {
         svg.appendChild(hoverText);
     });
     svg.appendChild(defs);
+    return svg;
 };
