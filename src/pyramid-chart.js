@@ -65,13 +65,13 @@ const generatePyramidChart = (container, data, width = 400, height = 400) => {
             stroke: 'none',
             fill: d.color,
         });
-        rectangle.onmouseenter = function () {
+        rectangle.onmouseover = function () {
             const labels = svg.querySelectorAll(`.label`);
             const tooltips = svg.querySelectorAll(`.tooltip`);
             labels[i].style.display = 'none';
             tooltips[i].style.display = 'initial';
         };
-        rectangle.onmouseout = function () {
+        rectangle.onmouseleave = function () {
             const labels = svg.querySelectorAll(`.label`);
             const tooltips = svg.querySelectorAll(`.tooltip`);
             labels[i].style.display = 'initial';
@@ -79,7 +79,8 @@ const generatePyramidChart = (container, data, width = 400, height = 400) => {
         };
         accumulatedHeight += rectHeight;
         const text = createTextNode(width / 2, startY + rectHeight / 2, `${d.percent}%`, 'label');
-        const hoverText = createTextNode(width / 2, startY + rectHeight / 2, `${d.type} ${d.rate ? `(Rate: ${d.rate}) ` : ''}: ${d.percent}%`, 'tooltip');
+        const rate = d.rate ? `(Rate: ${d.rate})` : ''
+        const hoverText = createTextNode(width / 2, startY + rectHeight / 2, `${d.type} ${rate}: ${d.percent}%`, 'tooltip');
         g.appendChild(rectangle);
         svg.appendChild(text);
         svg.appendChild(hoverText);
